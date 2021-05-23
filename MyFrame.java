@@ -4,39 +4,37 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.*;
-import java.awt.Image;
-import java.awt.Color;;
-import java.io.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import javax.sound.sampled.*;
 
 public class MyFrame extends JFrame implements ActionListener{
     JButton button, button2;
     JLabel myLabel, myLabel2;
     Clip clip;
+    String soundFilePos = "19th_Floor_Bobby_Richards.wav";
+    File file = new File(soundFilePos);
 
-    Scanner scanner = new Scanner(System.in);
-    PlayAudio playAudio = new PlayAudio();
-      
-    //InputStream in = new FileInputStream(new File("Sonnymoon For Two.wav"));
-   // AudioStream song = new AudioStream(in);
+    AudioInputStream sound = AudioSystem.getAudioInputStream(file);
 
-    MyFrame(){
+    MyFrame()throws IOException, UnsupportedAudioFileException, LineUnavailableException {
 
-        
+         //clip is created
+        clip = AudioSystem.getClip();
+        //The sound file is attached to the sound manager (clip)
+        clip.open(sound);
 
         //-------- Creates the Buttons --------
         //30, 50, 100, 50);menu
         
         button = new JButton("Play");
     	button2 = new JButton("Stop");
+    	button3 = new JButton("Next");
         button.setBounds(30, 200, 100, 50);
         button.addActionListener(this);
-        button2.addActionListener(this);
         button.setText("Play");
+        button2.addActionListener(this);
         button2.setText("Stop");
         button2.setBounds(30,270, 100, 50);
     	//--------- Creates Frame ----------
@@ -48,6 +46,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	    this.setVisible(true); // makes visible
         this.add(button);
         this.add(button2);
+        this.add(button3);
         
        
         //--------- Embeds Image to Frame --------
@@ -66,41 +65,17 @@ public class MyFrame extends JFrame implements ActionListener{
 
           if (e.getActionCommand().equals("Play")) {
               
-              System.out.println(playAudio);
-              /*Clip clip = AudioSystem.getClip();
-              clip.open(audioStream);
-
-              String response = scanner.next();
-              clip.start();*/
+              //Sound is set to start at the beginning
+              clip.setFramePosition(0);
+              //Sound is started
+              clip.start();
+             
         }
           if (e.getActionCommand().equals("Stop")) {
-              clip.stop();
-        }
-           
-           
+             clip.stop();
+             
+        }      
+   }        
             
-        }
-public void PlayAudio(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException{
-
-        Scanner scanner = new Scanner(System.in);
-
-        File file = new File("Sonnymoon For Two.wav");
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioStream);
-
-        String response = scanner.next();
-        //response = res
-
-      //  while(!response.equals("Q")){
-
-//AudioPlayer.player.start(song);  PlayAudio.clip.start(file);
-        //}
-// AudioPlayer.player.stop(song);
-
-        clip.start();
-    }
-          
-        
- }
+}
 
